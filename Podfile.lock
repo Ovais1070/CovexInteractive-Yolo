@@ -1,0 +1,49 @@
+PODS:
+  - Alamofire (4.9.1)
+  - FSPagerView (0.8.3)
+  - Letters (2.1.1)
+  - PonyDebugger (0.4.5):
+    - SocketRocket
+  - ReachabilitySwift (5.0.0)
+  - SocketRocket (0.5.1)
+  - Starscream (3.0.6)
+  - SwiftyJSON (5.0.0)
+  - Toast-Swift (5.0.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.6)
+  - FSPagerView
+  - Letters
+  - PonyDebugger (~> 0.4.3)
+  - ReachabilitySwift
+  - Starscream (~> 3.0.2)
+  - SwiftyJSON
+  - Toast-Swift (~> 5.0.1)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Starscream
+  trunk:
+    - Alamofire
+    - FSPagerView
+    - Letters
+    - PonyDebugger
+    - ReachabilitySwift
+    - SocketRocket
+    - SwiftyJSON
+    - Toast-Swift
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
+  Letters: 34476b0d413813bcf9273b2760be7ff4cd75f5c7
+  PonyDebugger: 1c60f7c876bdb6a8b6bf0f0269087f8a234fafa7
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
+
+PODFILE CHECKSUM: 75829f25df11554bb678942d97f89f36d2614d08
+
+COCOAPODS: 1.9.3

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Text-Semibold.otf">
+            <string>SFProText-Semibold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="ContactCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="ContactCell" rowHeight="73" id="bgu-bg-wfQ" customClass="ContactCell" customModule="ConvexVchat" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="73"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bgu-bg-wfQ" id="7iL-E7-jlj">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="73"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="moon.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="I1Q-i7-fOW">
+                        <rect key="frame" x="15" y="12" width="50" height="49"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="LQi-ur-I1Y"/>
+                            <constraint firstAttribute="width" constant="50" id="Q2a-hC-MvX"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LOP-ie-Lbm">
+                        <rect key="frame" x="77" y="9" width="45.5" height="20"/>
+                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tyK-NF-YVK">
+                        <rect key="frame" x="77" y="33" width="45.5" height="20"/>
+                        <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PV1-zu-9Nk">
+                        <rect key="frame" x="321" y="24.5" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="UhH-Wx-KH5"/>
+                            <constraint firstAttribute="height" constant="24" id="V7D-0z-999"/>
+                        </constraints>
+                        <state key="normal" image="local_phone-Gray"/>
+                        <connections>
+                            <action selector="makeAudioCall:" destination="bgu-bg-wfQ" eventType="touchUpInside" id="u16-U4-1k0"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chV-fK-JlX">
+                        <rect key="frame" x="277" y="24.5" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="Pwi-Lx-RBF"/>
+                            <constraint firstAttribute="width" constant="24" id="UWt-8e-LV2"/>
+                        </constraints>
+                        <state key="normal" image="videocam-Grey"/>
+                        <connections>
+                            <action selector="makeVideoCall:" destination="bgu-bg-wfQ" eventType="touchUpInside" id="goS-6X-Zu5"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N77-1n-b5o">
+                        <rect key="frame" x="265" y="18.5" width="90" height="36"/>
+                        <color key="backgroundColor" red="0.36862745099999999" green="0.0" blue="0.77647058820000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="90" id="NrI-cg-hB9"/>
+                            <constraint firstAttribute="height" constant="36" id="o0V-GR-Xnq"/>
+                        </constraints>
+                        <state key="normal" title="Invite">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="tyK-NF-YVK" firstAttribute="leading" secondItem="I1Q-i7-fOW" secondAttribute="trailing" constant="12" id="2jU-6f-Q1R"/>
+                    <constraint firstItem="I1Q-i7-fOW" firstAttribute="leading" secondItem="7iL-E7-jlj" secondAttribute="leading" constant="15" id="3BQ-Gv-S4W"/>
+                    <constraint firstItem="chV-fK-JlX" firstAttribute="centerY" secondItem="7iL-E7-jlj" secondAttribute="centerY" id="4fO-LW-I3b"/>
+                    <constraint firstItem="N77-1n-b5o" firstAttribute="centerY" secondItem="7iL-E7-jlj" secondAttribute="centerY" id="BoC-1T-uH0"/>
+                    <constraint firstItem="LOP-ie-Lbm" firstAttribute="top" secondItem="7iL-E7-jlj" secondAttribute="top" constant="9" id="DsW-Uc-Ka4"/>
+                    <constraint firstItem="PV1-zu-9Nk" firstAttribute="centerY" secondItem="7iL-E7-jlj" secondAttribute="centerY" id="Ekn-9E-wju"/>
+                    <constraint firstItem="LOP-ie-Lbm" firstAttribute="leading" secondItem="I1Q-i7-fOW" secondAttribute="trailing" constant="12" id="RmW-OB-xTs"/>
+                    <constraint firstItem="I1Q-i7-fOW" firstAttribute="centerY" secondItem="7iL-E7-jlj" secondAttribute="centerY" id="ccs-V5-7o5"/>
+                    <constraint firstItem="tyK-NF-YVK" firstAttribute="top" secondItem="LOP-ie-Lbm" secondAttribute="bottom" constant="4" id="gmm-jf-xZs"/>
+                    <constraint firstItem="PV1-zu-9Nk" firstAttribute="leading" secondItem="chV-fK-JlX" secondAttribute="trailing" constant="20" id="iDf-69-LOg"/>
+                    <constraint firstAttribute="trailing" secondItem="N77-1n-b5o" secondAttribute="trailing" constant="20" id="oy9-9e-CGM"/>
+                    <constraint firstAttribute="trailing" secondItem="PV1-zu-9Nk" secondAttribute="trailing" constant="30" id="wDh-8q-uBL"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="NlJ-v9-wGJ"/>
+            <connections>
+                <outlet property="contactImage" destination="I1Q-i7-fOW" id="JE9-L8-RPn"/>
+                <outlet property="contactName" destination="LOP-ie-Lbm" id="Bg3-Ts-Ylr"/>
+                <outlet property="contactNumber" destination="tyK-NF-YVK" id="zK0-sC-s62"/>
+                <outlet property="inviteBtn" destination="N77-1n-b5o" id="ZRX-mS-OgF"/>
+                <outlet property="makeAudioCall" destination="PV1-zu-9Nk" id="cKL-UL-0DK"/>
+                <outlet property="makeVideoCall" destination="chV-fK-JlX" id="TWE-4S-th6"/>
+            </connections>
+            <point key="canvasLocation" x="123.91304347826087" y="73.995535714285708"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="local_phone-Gray" width="24" height="24"/>
+        <image name="moon.circle" catalog="system" width="128" height="121"/>
+        <image name="videocam-Grey" width="24" height="24"/>
+    </resources>
+</document>

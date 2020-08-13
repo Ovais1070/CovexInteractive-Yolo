@@ -1,0 +1,6 @@
+framework module Pods_ConvexVchat {
+  umbrella header "Pods-ConvexVchat-umbrella.h"
+
+  export *
+  module * { export * }
+}

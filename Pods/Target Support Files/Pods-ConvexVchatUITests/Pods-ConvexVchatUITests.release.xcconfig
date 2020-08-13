@@ -1,0 +1,10 @@
+ENABLE_NS_ASSERTIONS = YES
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" "${PODS_CONFIGURATION_BUILD_DIR}/FSPagerView" "${PODS_CONFIGURATION_BUILD_DIR}/Letters" "${PODS_CONFIGURATION_BUILD_DIR}/PonyDebugger" "${PODS_CONFIGURATION_BUILD_DIR}/ReachabilitySwift" "${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket" "${PODS_CONFIGURATION_BUILD_DIR}/Starscream" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyJSON" "${PODS_CONFIGURATION_BUILD_DIR}/Toast-Swift"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/FSPagerView/FSPagerView.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Letters/Letters.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/PonyDebugger/PonyDebugger.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/ReachabilitySwift/Reachability.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket/SocketRocket.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Starscream/Starscream.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyJSON/SwiftyJSON.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Toast-Swift/Toast_Swift.framework/Headers"
+OTHER_LDFLAGS = $(inherited) -l"icucore" -framework "Alamofire" -framework "CFNetwork" -framework "CoreData" -framework "CoreGraphics" -framework "CoreTelephony" -framework "FSPagerView" -framework "Letters" -framework "PonyDebugger" -framework "QuartzCore" -framework "Reachability" -framework "Security" -framework "SocketRocket" -framework "Starscream" -framework "SwiftyJSON" -framework "SystemConfiguration" -framework "Toast_Swift" -framework "UIKit"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
+PODS_ROOT = ${SRCROOT}/Pods
+USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES

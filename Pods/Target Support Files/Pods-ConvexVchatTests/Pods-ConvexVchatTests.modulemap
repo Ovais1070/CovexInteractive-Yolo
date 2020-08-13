@@ -1,0 +1,6 @@
+framework module Pods_ConvexVchatTests {
+  umbrella header "Pods-ConvexVchatTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
