@@ -64,13 +64,13 @@ extension UIViewController {
     
     func push(id : String, animation : Bool){
         
+      
         
-        
-         
+         print("Identifier", id)
         if let vc = self.storyboard?.instantiateViewController(withIdentifier: id){
             self.navigationController?.pushViewController(vc, animated: animation)
+
         }
-        
     }
     
     //MARK:- Push To Right

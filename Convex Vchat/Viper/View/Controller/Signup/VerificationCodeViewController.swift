@@ -102,6 +102,14 @@ extension VerificationCodeViewController {
        
     }
     
+    
+    
+        
+        
+    
+    
+    
+    
 }
 
 
@@ -215,13 +223,22 @@ extension VerificationCodeViewController : DPKWebOperationDelegate {
         {
             self.loader.isHidden = true
 
+             print("SignIn verification Screen")
+            
             //DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signInOtp)
+//
+                
+                
+                
+            
 
         }
         else{
             self.loader.isHidden = false
-
-              DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signUpOtp)
+            print("SignUP verification Screen")
+//              DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signUpOtp)
+            
+           
         }
                  }
 
@@ -234,10 +251,63 @@ func getoTp(){
        
        print("parameters for Map", parameters)
        
-   DPKWebOperation.operation_delegate = self
+//   DPKWebOperation.operation_delegate = self
         //Call WebService
        
-DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: "get-otp")
+//DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: "get-otp")
+    
+     AuthService.instance.VerificationCode(MethodName: "get-otp", params: parameters, successCompletionHandler: { (response) in
+                  print("SignIn verification Screen", response)
+       
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: response as Data, options: JSONSerialization.ReadingOptions()) as! NSDictionary
+
+            print("dictionarydictionary", dictionary)
+            
+            let responseCode = dictionary["code"] as! Int
+            
+                                    switch responseCode{
+                                    case 200:
+                                        self.loader.isHidden = true
+            
+            
+                                        Common.storeUserData(from: PresenterProcessor.shared.profile(data: response as Data))
+                                        storeInUserDefaults()
+            
+                                        self.dismiss(animated: false) {
+                                            self.push(id: Storyboard.Ids.HomeViewController, animation: true)
+                                        }
+            
+                                       
+                                        
+            
+            
+                                        print("Response is 200")
+                                    case 400 :
+                                        print("Error")
+                                    default:
+                                        print("")
+                                    break
+            
+            
+            
+                                    }
+
+           }
+        catch {
+           // catch error.
+                 }
+    
+        
+        
+
+
+
+                    }) { (response: String) in
+                        self.view.makeToast(response)
+                            print("NON - Success reponse",response)
+                        }
+                
    }
 }
 // MARK:- UITextFieldDelegate
