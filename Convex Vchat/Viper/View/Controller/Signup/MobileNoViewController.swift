@@ -26,7 +26,8 @@ class MobileNoViewController: UITableViewController  {
     //MARK:- Local Variable
  
     private var userInfo : UserData?
- 
+    var checkUserVM = CheckUserVM()
+    var sendRegisterOTPVM = SendRegisterOTPVM()
     private var countryCode : String?
 
     lazy var loader  : UIView = {
@@ -91,11 +92,6 @@ extension MobileNoViewController {
             
             checkUser()
 
-            
-           // presenter?.get(api: .phoneNumVerify, parameters: [Keys.list.mobile : mobileNo])
-            
-         
-            
          }
         
         
@@ -163,8 +159,6 @@ extension MobileNoViewController : PostViewProtocol , DPKWebOperationDelegate {
    
         func callBackFailResponse(dictResponse: [String : Any]) {
                   
-             
-    
            if dictResponse["data"] != nil
                              {
 
@@ -181,10 +175,7 @@ extension MobileNoViewController : PostViewProtocol , DPKWebOperationDelegate {
                                }
 
                                }
-
-    
-
-          }
+        }
     
     func getProfile(api: Base, data: Profile?) {
        
@@ -201,16 +192,11 @@ extension MobileNoViewController : PostViewProtocol , DPKWebOperationDelegate {
 
             DispatchQueue.main.async {
                 self.phoneNumber.becomeFirstResponder()
+            }
         }
-            
-          //  self.make
+        else {
+               sendOtp()
         }
-        else
-        {
-             //  sendoTp()
-            
-            
-         }
         
         
         
@@ -250,38 +236,56 @@ extension MobileNoViewController : PostViewProtocol , DPKWebOperationDelegate {
 
       
     func sendOtp(){
-                  
-                  //let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
-                  let code = countryText.text?.replacingOccurrences(of: "+", with: "")
-                  let mobileNo = "\(code!)\(phoneNumber.text!)"
-                  let parameters : [String : String] = ["mobile" :mobileNo]
-
-                  
-                  print("parameters for checkUser", parameters)
-                  self.loader.isHidden = false
-              DPKWebOperation.operation_delegate = self
-                   //Call WebService
-                  
-           DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signUpOtp)
-              }
+        
+        //let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
+        let code = countryText.text?.replacingOccurrences(of: "+", with: "")
+        let mobileNo = "\(code!)\(phoneNumber.text!)"
+        
+        sendRegisterOTPVM.sendOtpData(mobileNumber: mobileNo)
+        sendRegisterOTPVM.sendOTPCompletionHandler { (status, message) in
+            if status == true {
+                self.loader.isHidden = true
+                print("CheckUsermessage", message)
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "VerificationCodeViewController") as! VerificationCodeViewController
+                Common.isFrom = "signUp"
+                User.main.mobile = mobileNo
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+                
+                self.view.makeToast(message)
+            } else {
+                self.loader.isHidden = true
+                
+                self.view.makeToast(message)
+            }
+        }
+    }
 
     
     
     func checkUser(){
-               
-               //let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
-               let code = countryText.text?.replacingOccurrences(of: "+", with: "")
-               let mobileNo = "\(code!)\(phoneNumber.text!)"
-               let parameters : [String : String] = ["mobile" :mobileNo]
-
-               
-               print("parameters for checkUser", parameters)
-               self.loader.isHidden = false
-           DPKWebOperation.operation_delegate = self
-                //Call WebService
-               
-        DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.checkUser)
-           }
+        
+        //let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
+        let code = countryText.text?.replacingOccurrences(of: "+", with: "")
+        let mobileNo = "\(code!)\(phoneNumber.text!)"
+        
+        checkUserVM.CheckUserData(mobileNumber: mobileNo)
+        checkUserVM.checkUserCompletionHandler { (status, message) in
+            if status == true {
+                self.loader.isHidden = true
+                print("CheckUsermessage", message)
+                
+                self.view.makeToast(message)
+            } else {
+                self.loader.isHidden = true
+                self.sendOtp()
+                self.view.makeToast(message)
+            }
+        }
+        
+        
+    }
 
  
 //    let code = countryText.text?.replacingOccurrences(of: "+", with: "")
@@ -337,7 +341,7 @@ extension MobileNoViewController : PostViewProtocol , DPKWebOperationDelegate {
         {
             
             self.loader.isHidden = true
-            sendOtp()
+//            sendOtp()
             self.present(id: Storyboard.Ids.VerificationCodeViewController, animation: true)
 
         }

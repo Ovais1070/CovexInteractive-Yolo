@@ -23,6 +23,9 @@ struct Storyboard {
     //MARK:- After Login/Signup
     let HomeViewController = "HomeViewController"
     let ContactsViewController = "ContactsViewController"
+    let NavigationVC = "NavigationVC"
+    
+    let CallViewController = "CallViewController"
 
 
      

@@ -29,7 +29,9 @@ class SignInTableViewController: UITableViewController  {
     //MARK:- Local Variable
  
     private var userInfo : UserData?
- 
+    var signinVM = SignInVM()
+    let gradient: CAGradientLayer = CAGradientLayer()
+    
     private var countryCode : String?
 
     lazy var loader  : UIView = {
@@ -40,8 +42,8 @@ class SignInTableViewController: UITableViewController  {
         super.viewDidLoad()
         self.setNavigationcontroller()
         self.setDesign()
-        
         print("User.main.firstName",User.main.username ?? "")
+        
  
     }
     
@@ -90,14 +92,7 @@ extension SignInTableViewController {
             let mobileNo = "\(code!)\(phoneNumber.text!)"
             
             self.loader.isHidden = false
-            
-            
             signIn()
-            
-            
-          //  presenter?.get(api: .phoneNumVerify, parameters: [Keys.list.mobile : mobileNo])
-            
-         
             
          }
         
@@ -154,111 +149,42 @@ extension SignInTableViewController {
     }
    
     
-    }
-         
-     
- 
-
-// MARK:- ApiCallRespose
-
-
-extension SignInTableViewController :    DPKWebOperationDelegate {
-    func callBackSuccessResponseData(dictResponse: Data) {
-        
-        
-        
-    }
-    
-   
-        
-   
     func signIn(){
                
-         
-               let code = countryText.text?.replacingOccurrences(of: "+", with: "")
-               let mobileNo = "\(code!)\(phoneNumber.text!)"
         
-                User.main.mobile = mobileNo
-               let parameters : [String : String] = ["mobile" :mobileNo]
-
-               
-               print("parameters for Login", parameters)
-               self.loader.isHidden = false
-           DPKWebOperation.operation_delegate = self
-                //Call WebService
-               
-        DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signIn)
-          
+        let code = countryText.text?.replacingOccurrences(of: "+", with: "")
+        let mobileNo = "\(code!)\(phoneNumber.text!)"
+        
+        User.main.mobile = mobileNo
+//        let parameters : [String : String] = ["mobile" :mobileNo]
+        
+        if phoneNumber.text?.count != 0 {
+            print("numberNumber", mobileNo)
+            signinVM.SignInData(mobileNumber: mobileNo)
+            
+        } else {
+            print("Please Enter mobile Number")
+        }
+        
+        signinVM.loginCompletionHandler { (status, message) in
+            if status {
+                self.loader.isHidden = true
+                Common.isFrom = "signin"
+                self.present(id: Storyboard.Ids.VerificationCodeViewController, animation: true)
+                
+                self.view.makeToast(message)
+            } else {
+                self.view.makeToast(message)
+            }
+        }
+        self.signinVM.errorCompletionHandler { (message) in
+             self.loader.isHidden = true
+        self.view.makeToast(message, point: CGPoint(x: UIScreen.main.bounds.size.width  / 2, y: UIScreen.main.bounds.size.height  / 2), title: nil, image: nil, completion: nil)
+                   }
+    }
+    
     }
 
-  
-       func callBackSuccessResponse(dictResponse: [String:Any]) {
-               print("callBackSuccessResponseSignin", dictResponse)
- 
-        
-        if dictResponse["data"] != nil
-                 {
-                    
-//                    if let data = dictResponse["data"]  as? [String : Any]
-//                    {
-                        if let status = dictResponse["status"] as? Bool
-                        {
-                            if status == true
-                            {
-                                self.loader.isHidden = true
-
-                                Common.isFrom = "signin"
-
-                                
-                                self.present(id: Storyboard.Ids.VerificationCodeViewController, animation: true)
-                                
-                                
-                                
-                            }
-                       // }
-                    }
- 
-                 }
-         
-}
-    
-    func callBackFailResponse(dictResponse: [String : Any]) {
-                      
-                 
-        
-               if dictResponse["data"] != nil
-            
-               {
-
-                if  dictResponse["status"] as! Bool == false
-                
-                {
-                             
-                    
-                    self.loader.isHidden = true
-                    
-                    
-                self.present(id: Storyboard.Ids.VerificationCodeViewController, animation: true)
-
-    //                let message : String =  (dictResponse["message"] as? String)!
-    //                self.phoneNumber.shake()
-    //                vibrate(with: .weak)
-    //                self.loader.isHidden = true
-    //                self.view.makeToast(message, duration: 3.0, position: .center)
-                                                                  
-                
-                }
-                                    
-           
-                }
-
-        
-
-              }
-        
-         
-  
-}
 
 // MARK:- UITextFieldDelegate
 

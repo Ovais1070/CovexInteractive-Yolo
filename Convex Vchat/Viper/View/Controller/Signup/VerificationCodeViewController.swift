@@ -9,82 +9,65 @@
 import UIKit
 
 class VerificationCodeViewController: UITableViewController {
-
+    var window: UIWindow?
     //MARK:- IBOutlets
-
+    
     @IBOutlet var codeText: HoshiTextField!
     @IBOutlet var mobNoLabel: UILabel!
     
     //MARK:- localVariables
     
     var apiFlag = ""
+    var sendOTPVM = SendOTPVM()
+    var getOTPVM = GetOTPVM()
     
     lazy var loader  : UIView = {
-           return createActivityIndicator(self.view)
-       }()
-
+        return createActivityIndicator(self.view)
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationcontroller()
         self.setDesign()
-        self.sendOtp()
-        
-        
-        // Do any additional setup after loading the view.
+        if Common.isFrom != "signUp"{
+            self.sendOtp()
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
+    
 }
+
 extension VerificationCodeViewController {
     
     // Designs
     
     @IBAction func nextBtnTapped(sender : UIButton){
-          
-    
-          guard let lastName = codeText.text, lastName.trimmed().count > 0 else {
-              self.showToast(string: ErrorMessage.list.enterVerCode)
-              self.codeText.shake()
-              vibrate(with: .weak)
-              return
-          }
+        
+        
+        guard let lastName = codeText.text, lastName.trimmed().count > 0 else {
+            self.showToast(string: ErrorMessage.list.enterVerCode)
+            self.codeText.shake()
+            vibrate(with: .weak)
+            return
+        }
         
         self.loader.isHidden = false
         self.getoTp()
-          
-//          let code = countryText.text?.replacingOccurrences(of: "+", with: "")
-//          let mobileNo = "\(code!)\(phoneNumber.text!)"
-//          presenter?.get(api: .phoneNumVerify, parameters: [Keys.list.mobile : mobileNo])
-//
-       
-          
-       }
+        
+    }
+    
     private func setDesign() {
-        
         Common.setFont(to: codeText ?? "")
-        
         Common.setFont(to: mobNoLabel ?? "")
-        
-        mobNoLabel.text = "Enter the code sent to " + (User.main.mobile ?? "") 
- 
-       
+        mobNoLabel.text = "Enter the code sent to " + (User.main.mobile ?? "")
     }
     
     private func localize(){
         
-       // self.firstNameText.placeholder = Constants.string.first.localize()
-      //  self.lastNameText.placeholder = Constants.string.last.localize()
-     }
+        // self.firstNameText.placeholder = Constants.string.first.localize()
+        //  self.lastNameText.placeholder = Constants.string.last.localize()
+    }
     
     func setNavigationcontroller(){
         
@@ -92,224 +75,88 @@ extension VerificationCodeViewController {
             self.navigationController?.navigationBar.prefersLargeTitles = true
             self.navigationController?.navigationBar.barTintColor = UIColor.white
         }
-       // title = Constants.string.registerDetails.localize()
-        // self.navigationController?.navigationBar.tintColor = UIColor.white
-       // self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "back-icon"), style: .plain, target: self, action: #selector(self.backButtonClick))
-//        addGustureforNextBtn()
-       // self.view.dismissKeyBoardonTap()
         self.codeText.delegate = self
- 
-       
     }
     
     
     
-        
-        
-    
-    
-    
-    
-}
-
-
-// MARK:- UITextFieldDelegate
-
-
-extension VerificationCodeViewController : DPKWebOperationDelegate {
-    func callBackSuccessResponseData(dictResponse: Data) {
-        
-        
-        
-        print("callBackSuccessResponseData", dictResponse)
-             
-             UserSingleton.share.ProfileData =  PresenterProcessor.shared.profile(data: dictResponse)
-             
-            let userData = PresenterProcessor.shared.profile(data: dictResponse)
-             
-             
-             User.main.mobile = UserSingleton.share.ProfileData?.data.mobile ?? ""
-             if UserSingleton.share.ProfileData?.status  == false
-             {
-                self.codeText.shake()
-                 vibrate(with: .weak)
-                 self.loader.isHidden = true
-
-                 self.showToast(string: ErrorMessage.list.userAlreadyRegistered)
-
-                 DispatchQueue.main.async {
-                     self.codeText.becomeFirstResponder()
-             }
-             }
-             else
-             {
-                self.loader.isHidden = true
-                if apiFlag == "getotp"
-                {
-                  
-                    print("Common.isFrom", Common.isFrom)
-
-                    
-                    
-                if Common.isFrom == "signin"
-                {
-                     
-                    
-                    Common.storeUserData(from: PresenterProcessor.shared.profile(data: dictResponse))
-                    storeInUserDefaults()
-                    
-                    self.dismiss(animated: false, completion: nil)
-
-                      
-                    self.push(id: Storyboard.Ids.HomeViewController, animation: true)
-                    
-                    
-                    
-                    
-                }
-                else
-                {
-                   if apiFlag == "getotp"
-                   {
-                   self.present(id:Storyboard.Ids.DOBViewController, animation: true)
-                   self.view.endEditingForce()
-                   }
-                }
-                    
-                }
-                
-              }
-        
-        
-    }
-    
-    func callBackSuccessResponse(dictResponse: [String : Any]) {
-         
-    }
-    
-    func callBackFailResponse(dictResponse: [String : Any]) {
-         if let status = dictResponse["status"] as? Bool
-                {
-   if status == true
-   {
-       self.present(id:Storyboard.Ids.DOBViewController, animation: true)
-   }
-   else
-   {
-       if let message = dictResponse["message"] as? String
-       {
-       showToast(string: message)
-       vibrate(with: .weak)
-       self.codeText.shake()
-        self.loader.isHidden = true
-
-       }
-   }
-        }
-    }
     func sendOtp(){
-                     
-                     //let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
-                      let parameters : [String : String] = ["mobile" :User.main.mobile ?? ""]
-
-                     
-                     print("parameters for checkUser", parameters)
-                 DPKWebOperation.operation_delegate = self
-                      //Call WebService
         
+        let mobileNumber = User.main.mobile
         
-        print("Common.isFrom", Common.isFrom)
-        if Common.isFrom == "signin"
-        {
-            self.loader.isHidden = true
-
-             print("SignIn verification Screen")
+        sendOTPVM.sendOtpData(mobileNumber: mobileNumber!)
+        sendOTPVM.sendOTPCompletionHandler { (status, message) in
             
-            //DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signInOtp)
-//
+            if status {
+                self.loader.isHidden = true
                 
                 
                 
-            
-
+                self.view.makeToast(message)
+            } else {
+                self.loader.isHidden = true
+                self.view.makeToast(message)
+            }
         }
-        else{
-            self.loader.isHidden = false
-            print("SignUP verification Screen")
-//              DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: Constants.signUpOtp)
-            
-           
-        }
-                 }
-
-
-func getoTp(){
-       
-    apiFlag = "getotp"
-    let parameters : [String : String] = ["mobile" :User.main.mobile ?? "", "code" : codeText.text!]
-       
-       
-       print("parameters for Map", parameters)
-       
-//   DPKWebOperation.operation_delegate = self
-        //Call WebService
-       
-//DPKWebOperation.WebServiceCalling(vc: self, dictPram: parameters, methodName: "get-otp")
+    }
     
-     AuthService.instance.VerificationCode(MethodName: "get-otp", params: parameters, successCompletionHandler: { (response) in
-                  print("SignIn verification Screen", response)
-       
-        do {
-            let dictionary = try JSONSerialization.jsonObject(with: response as Data, options: JSONSerialization.ReadingOptions()) as! NSDictionary
-
-            print("dictionarydictionary", dictionary)
-            
-            let responseCode = dictionary["code"] as! Int
-            
-                                    switch responseCode{
-                                    case 200:
-                                        self.loader.isHidden = true
-            
-            
-                                        Common.storeUserData(from: PresenterProcessor.shared.profile(data: response as Data))
-                                        storeInUserDefaults()
-            
-                                        self.dismiss(animated: false) {
-                                            self.push(id: Storyboard.Ids.HomeViewController, animation: true)
-                                        }
-            
-                                       
-                                        
-            
-            
-                                        print("Response is 200")
-                                    case 400 :
-                                        print("Error")
-                                    default:
-                                        print("")
-                                    break
-            
-            
-            
-                                    }
-
-           }
-        catch {
-           // catch error.
-                 }
-    
+    func getoTp(){
         
+        apiFlag = "getotp"
+        let mobileNumber = User.main.mobile
         
-
-
-
-                    }) { (response: String) in
-                        self.view.makeToast(response)
-                            print("NON - Success reponse",response)
+        if codeText.text?.count != 0 {
+            
+            getOTPVM.getOtpData(mobileNumber: mobileNumber!, code: codeText.text!)
+            
+            getOTPVM.getOTPCompletionHandler {(response, status, message) in
+                if status {
+                    self.loader.isHidden = true
+                    if self.apiFlag == "getotp"
+                    { print("Common.isFrom", Common.isFrom)
+                        if Common.isFrom == "signin"
+                        {
+                            print("response response response", response)
+                            Common.storeUserData(from: PresenterProcessor.shared.profile(data: response as Data))
+                            storeInUserDefaults()
+                            
+                           
+                           let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            let  mainView = UIStoryboard(name:"Main", bundle: nil)
+                                                       let viewcontroller : UIViewController = mainView.instantiateViewController(withIdentifier: "NavigationVC") as! NavigationVC
+                            appDelegate.window!.rootViewController = viewcontroller
+                            
+//                            self.dismiss(animated: false) {
+//                                self.push(id: Storyboard.Ids.NavigationVC, animation: true)
+//                            }
+                        } else if self.apiFlag == "getotp"
+                        {
+                            self.present(id:Storyboard.Ids.DOBViewController, animation: true)
+                            self.view.endEditingForce()
                         }
-                
-   }
+                    }
+                    self.view.makeToast(message)
+                } else {
+                    
+                    self.loader.isHidden = true
+                    self.view.makeToast(message)
+                }
+            }
+            
+            self.getOTPVM.errorCompletionHandler { (message) in
+                     self.loader.isHidden = true
+                self.view.makeToast(message, point: CGPoint(x: UIScreen.main.bounds.size.width  / 2, y: UIScreen.main.bounds.size.height  / 2), title: nil, image: nil, completion: nil)
+                           }
+        } else {
+            print("code text is empty")
+        }
+    }
+    
+    
+    
 }
+
+
 // MARK:- UITextFieldDelegate
 
 extension VerificationCodeViewController : UITextFieldDelegate {
@@ -319,13 +166,13 @@ extension VerificationCodeViewController : UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-         
+        
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         (textField as? HoshiTextField)?.borderActiveColor = .primary
-         
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

@@ -128,13 +128,7 @@ extension UIViewController {
            person.setValue(number, forKeyPath: "mobile")
         person.setValue(exist, forKey: "exist")
 
-          // 4
-            // 4
-    //        do {
-    //          try managedContext.save()
-    //         // people.append(person)
-    //
-    //        }
+  
 
           do {
             try managedContext.save()
@@ -142,7 +136,9 @@ extension UIViewController {
 
            } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
+            
           }
+        
         }
     
        
@@ -240,39 +236,7 @@ extension UIViewController {
     }
     
     
-  /*  //MARK:- Right Bar Button Action
-    
-    @IBAction private func rightBarButtonAction(){
-        
-        let alertRightBar = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        alertRightBar.addAction(UIAlertAction(title: Constants.string.newGroup, style: .default, handler: { (Void) in
-            
-        }))
-        
-        alertRightBar.addAction(UIAlertAction(title: Constants.string.newBroadcast, style: .default, handler: { (Void) in
-            
-        }))
-        
-        alertRightBar.addAction(UIAlertAction(title: Constants.string.starredMessages, style: .default, handler: { (Void) in
-            
-        }))
-        
-        alertRightBar.addAction(UIAlertAction(title: Constants.string.settings, style: .default, handler: { (Void) in
-            
-            self.pushRight(toViewController: self.storyboard!.instantiateViewController(withIdentifier: Storyboard.Ids.SettingViewController))
-            
-        }))
-        
-        alertRightBar.addAction(UIAlertAction(title: Constants.string.Cancel, style: .cancel, handler: { (Void) in
-            
-        }))
-        
-        alertRightBar.view.tintColor = .primary
-        
-        self.present(alertRightBar, animated: true, completion: nil)
-        
-    }  */
+  
    
     
     //MARK:- Show Search Bar with self delegation

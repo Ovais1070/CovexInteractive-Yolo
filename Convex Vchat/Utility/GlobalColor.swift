@@ -14,5 +14,5 @@ class GlobaColor {
     
     
         static let shared = GlobaColor()
-        var color = #colorLiteral(red: 0.368627451, green: 0, blue: 0.7764705882, alpha: 1)
+        var color = #colorLiteral(red: 0.4060974121, green: 0.1903869808, blue: 0.6568421721, alpha: 1)
 }

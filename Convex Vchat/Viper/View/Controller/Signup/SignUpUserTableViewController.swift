@@ -128,6 +128,7 @@ extension SignUpUserTableViewController {
         User.main.first_name = firstName
         User.main.last_name = lastName
 
+        self.loader.isHidden = true
         self.present(id: Storyboard.Ids.MobileNoViewController, animation: true)
          
 //        userInfo =  MakeJson.signUp(loginBy: .manual, email: email, password: password, socialId: nil, firstName: firstName, lastName: lastName, mobile: mobile, referral_code: isReferalEnable == 0 ? "" : self.textFieldReferCode.text!, country_code: self.countryText.text)

@@ -25,31 +25,30 @@ struct SignalingMessage: Codable {
 }
 
 
-struct SignalingMessagee: Codable {
-   let type: String
-    let name: String
+//struct SignalingMessagee: Codable {
+//   let type: String
+//    let name: String
+//
+//   let answer: offer
+//    let candidate: Candidate?
+//
+//
+//}
 
-   let answer: offer
-    let candidate: Candidate?
-
-
-}
-
-struct offer: Codable {
-    let sdp: String
-    let type: String
-
-}
+//struct offer: Codable {
+//    let sdp: String
+//    let type: String
+//}
 struct SDP: Codable {
     let sdp: String
 }
 
-struct Candidate: Codable {
-    let sdp: String
-    let sdpMLineIndex: Int32
-    let sdpMid: String
-    let name: String
-}
+//struct Candidate: Codable {
+//    let sdp: String
+//    let sdpMLineIndex: Int32
+//    let sdpMid: String
+//    let name: String
+//}
 
 
 struct sendUserCandidate: Codable {

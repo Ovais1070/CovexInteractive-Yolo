@@ -35,9 +35,25 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private var channels: (video: Bool, audio: Bool, datachannel: Bool) = (false, false, false)
     private var customFrameCapturer: Bool = false
     
+    public var callingInfo: CallingInfo?
+    
     var delegate: WebRTCClientDelegate?
     public private(set) var isConnected: Bool = false
+    public var answerSDP: RTCSessionDescription?
+    private static var sharedInstance: WebRTCClient = {
+        let instance = WebRTCClient()
+        // Configuration
+        // ...
+
+        return instance
+    }()
     
+    // MARK: - Accessors
+
+    class func instance() -> WebRTCClient {
+        return sharedInstance
+    }
+
     func localVideoView() -> UIView {
         return localView
     }
@@ -115,7 +131,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
     }
     
-    // MARK: Signaling Event
+    // MARK: Receive Offer Event
     func receiveOffer(offerSDP: RTCSessionDescription, onCreateAnswer: @escaping (RTCSessionDescription) -> Void){
         
         print("offer received, create peerconnection")
@@ -151,6 +167,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         }
     }
     
+    // MARK: Receive Answer Event
     func receiveAnswer(answerSDP: RTCSessionDescription){
         self.peerConnection!.setRemoteDescription(answerSDP) { (err) in
             if let error = err {
@@ -162,7 +179,62 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     }
     
     func receiveCandidate(candidate: RTCIceCandidate){
-        self.peerConnection!.add(candidate)
+        print("candidatecandidate", candidate)
+        if let pc = self.peerConnection {
+            pc.add(candidate)
+        }
+//        self.peerConnection!.add(candidate)
+    }
+    
+    // MARK: - Make Offer
+    private func makeOffer(onSuccess: @escaping (RTCSessionDescription) -> Void) {
+        self.peerConnection?.offer(for: RTCMediaConstraints.init(mandatoryConstraints: nil, optionalConstraints: nil)) { (sdp, err) in
+            if let error = err {
+                print("error with make offer")
+                print(error)
+                return
+            }
+            
+            if let offerSDP = sdp {
+                print("make offer, created local sdp")
+                self.peerConnection!.setLocalDescription(offerSDP, completionHandler: { (err) in
+                    if let error = err {
+                        print("error with set local offer sdp")
+                        print(error)
+                        return
+                    }
+                    print("succeed to set local offer SDP")
+                    onSuccess(offerSDP)
+                })
+            }
+            
+        }
+    }
+    
+    // MARK: - Make Answer
+    private func makeAnswer(onCreateAnswer: @escaping (RTCSessionDescription) -> Void){
+        self.peerConnection!.answer(for: RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil), completionHandler: { (answerSessionDescription, err) in
+            if let error = err {
+                print("failed to create local answer SDP")
+                print(error)
+                return
+            }
+            
+            print("succeed to create local answer SDP")
+            if let answerSDP = answerSessionDescription{
+                self.peerConnection!.setLocalDescription( answerSDP, completionHandler: { (err) in
+                    if let error = err {
+                        print("failed to set local ansewr SDP")
+                        print(error)
+                        return
+                    }
+                    
+                    print("succeed to set local answer SDP")
+                })
+                onCreateAnswer(answerSDP)
+
+            }
+        })
     }
     
     // MARK: DataChannel Event
@@ -206,19 +278,18 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private func setupPeerConnection() -> RTCPeerConnection{
         let rtcConf = RTCConfiguration()
        
+     rtcConf.iceServers = [RTCIceServer(urlStrings: ["stun:stun.convexinteractive.com:8080?transport=udp"])]
         
-        rtcConf.iceServers = [RTCIceServer(urlStrings: ["stun:srv3.mjunoon.tv:7070?transport=udp"])]
-         
-                rtcConf.iceServers.append(RTCIceServer(
-                    urlStrings: ["turn:srv3.mjunoon.tv:7070?transport=udp"],
-                    username: "admin",
-                    credential: "c0nv3x"
-                ))
-                rtcConf.iceServers.append(RTCIceServer(
-                    urlStrings: ["turn:srv3.mjunoon.tv:7070?transport=tcp"],
-                    username: "admin",
-                    credential: "c0nv3x"
-                ))
+               rtcConf.iceServers.append(RTCIceServer(
+                   urlStrings: ["turn:turn.convexinteractive.com:8080?transport=udp"],
+                   username: "administrator",
+                   credential: "c0nv3x"
+               ))
+               rtcConf.iceServers.append(RTCIceServer(
+                   urlStrings: ["turn:turn.convexinteractive.com:8080?transport=tcp"],
+                   username: "administrator",
+                   credential: "c0nv3x"
+               ))
         
 //        rtcConf.tcpCandidatePolicy = rtc
 
@@ -325,56 +396,6 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
         
         let _dataChannel = self.peerConnection?.dataChannel(forLabel: "dataChannel", configuration: dataChannelConfig)
         return _dataChannel!
-    }
-    
-    // MARK: - Signaling Offer/Answer
-    private func makeOffer(onSuccess: @escaping (RTCSessionDescription) -> Void) {
-        self.peerConnection?.offer(for: RTCMediaConstraints.init(mandatoryConstraints: nil, optionalConstraints: nil)) { (sdp, err) in
-            if let error = err {
-                print("error with make offer")
-                print(error)
-                return
-            }
-            
-            if let offerSDP = sdp {
-                print("make offer, created local sdp")
-                self.peerConnection!.setLocalDescription(offerSDP, completionHandler: { (err) in
-                    if let error = err {
-                        print("error with set local offer sdp")
-                        print(error)
-                        return
-                    }
-                    print("succeed to set local offer SDP")
-                    onSuccess(offerSDP)
-                })
-            }
-            
-        }
-    }
-    
-    private func makeAnswer(onCreateAnswer: @escaping (RTCSessionDescription) -> Void){
-        self.peerConnection!.answer(for: RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil), completionHandler: { (answerSessionDescription, err) in
-            if let error = err {
-                print("failed to create local answer SDP")
-                print(error)
-                return
-            }
-            
-            print("succeed to create local answer SDP")
-            if let answerSDP = answerSessionDescription{
-                self.peerConnection!.setLocalDescription( answerSDP, completionHandler: { (err) in
-                    if let error = err {
-                        print("failed to set local ansewr SDP")
-                        print(error)
-                        return
-                    }
-                    
-                    print("succeed to set local answer SDP")
-                })
-                onCreateAnswer(answerSDP)
-
-            }
-        })
     }
     
     // MARK: - Connection Events
@@ -519,4 +540,24 @@ extension WebRTCClient {
     func dataChannelDidChangeState(_ dataChannel: RTCDataChannel) {
         print("data channel did change state")
     }
+}
+
+
+struct SessionDescription: Codable {
+    let sdp: String
+    let type: String
+}
+
+struct SendCandidateType: Codable {
+    let type: String
+    let name: String
+    let answer: SessionDescription
+    let candidate: Candidate?
+}
+
+struct Candidate: Codable {
+    let sdp: String
+    let sdpMLineIndex: Int32
+    let sdpMid: String
+    let name: String
 }

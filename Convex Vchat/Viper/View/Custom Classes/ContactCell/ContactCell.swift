@@ -16,6 +16,8 @@ class ContactCell: UITableViewCell {
     @IBOutlet weak var contactNumber: UILabel!
     @IBOutlet weak var makeVideoCall: UIButton!
     @IBOutlet weak var makeAudioCall: UIButton!
+    @IBOutlet weak var imgBorder: UIView!
+    @IBOutlet weak var isOnline: UIView!
     
     @IBOutlet weak var inviteBtn: UIButton!
     
@@ -32,6 +34,10 @@ class ContactCell: UITableViewCell {
         
         inviteBtn.layer.cornerRadius = 5
         inviteBtn.isHidden = true
+        imgBorder.makeCircular()
+        isOnline.layer.borderWidth = 1
+        isOnline.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        isOnline.makeCircular()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

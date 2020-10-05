@@ -10,22 +10,20 @@ import UIKit
 
 class DOBViewController: UITableViewController {
 
+    var window: UIWindow?
+    
+    @IBOutlet weak var dobPicker: UIDatePicker!
+    var dob = ""
+    let registerVM = RegisterVM()
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        dobPicker.datePickerMode = .date
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
+    
 
 }
 // MARK:- ApiCallRespose
@@ -66,39 +64,37 @@ extension DOBViewController : PostViewProtocol  {
     
     
     @IBAction func nextBtnTapped(sender : UIButton){
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        self.dob = formatter.string(from: dobPicker.date)
+        self.view.endEditing(true)
+        print("DateDateDate", dob)
+        let mobile = User.main.mobile!
+        let firstName = User.main.first_name!
+        let lastName = User.main.last_name!
         
+        registerVM.RegisterUser(mobileNumber: mobile, first_name: firstName, last_name: lastName, dob: dob)
         
+        registerVM.registerCompletionHandler { (status, message) in
+            if status {
+                
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let  mainView = UIStoryboard(name:"Main", bundle: nil)
+                let viewcontroller : UIViewController = mainView.instantiateViewController(withIdentifier: "NavigationVC") as! NavigationVC
+                appDelegate.window!.rootViewController = viewcontroller
+                
+                self.view.makeToast(message)
+            } else {
+                self.view.makeToast(message)
+            }
+        }
         
-//        let code = countryText.text?.replacingOccurrences(of: "+", with: "")
-//        let mobileNo = "\(code!)\(phoneNumber.text!)"
-        
-        
-        presenter?.get(api: .signUp, parameters: [Keys.list.firstName : User.main.first_name ?? "",Keys.list.lastName : User.main.last_name ?? "",Keys.list.mobile : User.main.mobile ?? "", Keys.list.dob : User.main.dob ?? ""])
+//        presenter?.get(api: .signUp, parameters: [Keys.list.firstName : User.main.first_name ?? "",Keys.list.lastName : User.main.last_name ?? "",Keys.list.mobile : User.main.mobile ?? "", Keys.list.dob : User.main.dob ?? ""])
 //
 //
-//
-//        sender.view.addPressAnimation()
-        self.view.endEditingForce()
+//        self.view.endEditingForce()
      
-          
-        
-        
-        
-        
-            
-            
-           // self.present(id: Storyboard.Ids.MobileNoViewController, animation: true)
-             
-    //        userInfo =  MakeJson.signUp(loginBy: .manual, email: email, password: password, socialId: nil, firstName: firstName, lastName: lastName, mobile: mobile, referral_code: isReferalEnable == 0 ? "" : self.textFieldReferCode.text!, country_code: self.countryText.text)
-            
-     
-    //               let storyBoard: UIStoryboard = UIStoryboard(name: "User", bundle: nil)
-    //               let vc = storyBoard.instantiateViewController(withIdentifier: "CODETYPEVC") as! CODETYPEVC
-    //
-    //               vc.phone_no = self.countryText.text! + phoneNumber
-    //               vc.email = email
-    //
-    //               self.navigationController?.pushViewController(vc, animated: true)
+ 
                     
      
         }

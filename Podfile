@@ -17,6 +17,7 @@ target 'ConvexVchat' do
   
     pod 'Alamofire', '~> 4.6'
     pod 'SwiftyJSON'
+    pod 'SDWebImage', '~> 5.0'
 
 #pod for pagination
 

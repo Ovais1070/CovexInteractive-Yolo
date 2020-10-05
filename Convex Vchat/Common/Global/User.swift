@@ -14,13 +14,13 @@ class User : NSObject, NSCoding, JSONSerializable {
 
     static var main = initializeUserData()
     
-   var first_name : String?
+    var first_name : String?
     var last_name : String?
     var dob : String?
     var mobile : String?
-     var password : String?
+    var password : String?
     var username : String?
-
+    
     var host : String?
 
     
@@ -47,7 +47,7 @@ class User : NSObject, NSCoding, JSONSerializable {
         let host = aDecoder.decodeObject(forKey: Keys.list.host) as? String
         let firstName = aDecoder.decodeObject(forKey: Keys.list.firstName) as? String
         let lastName = aDecoder.decodeObject(forKey: Keys.list.lastName) as? String
-         let mobile = aDecoder.decodeObject(forKey: Keys.list.mobile) as? String
+        let mobile = aDecoder.decodeObject(forKey: Keys.list.mobile) as? String
         let username = aDecoder.decodeObject(forKey: Keys.list.username) as? String
 
         

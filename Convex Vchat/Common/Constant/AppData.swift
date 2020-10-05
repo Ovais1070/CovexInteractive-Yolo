@@ -17,8 +17,9 @@ var deviceTokenString = Constants.string.noDevice
 
 let appClientId = 2
 let passwordLengthMax = 10
- let baseUrl = "https://srv3.mjunoon.tv:10088/webrtc/api/"  
-
+// let baseUrl = "https://srv3.mjunoon.tv:10088/webrtc/api/"
+let baseUrl = "https://yolo.convexinteractive.com:10088/v1/"
+let socketUrl = "wss://yolo.convexinteractive.com:9090"
 var supportNumber = "1111"
 var supportEmail = "support@ryghthotshot.com"
 var offlineNumber = "57777"

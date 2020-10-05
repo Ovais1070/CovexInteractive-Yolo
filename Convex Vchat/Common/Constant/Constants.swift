@@ -25,12 +25,19 @@ struct Constants {
     static let checkUser   = "check-user"
     static let signUpOtp   = "send-otp-signup"
     static let signInOtp   = "send-otp"
+    static let register    = "register"
 
     static let kTo_SignUp   = "SignUp"
     static let  signIn   = "login"
     static let  fetchUserContacts   = "user-contacts"
 
     static let  importUserContacts   = "import-user-contacts"
+    static let updateUserProfile = "update-user"
+    static let getProfile = "profile"
+    static let changeNumber = "change-number"
+    static let logout = "logout"
+    static let getOtp = "get-otp"
+    
 
     
     static var string = Constants()

@@ -8,8 +8,13 @@
 
 import UIKit
 import Foundation
+import Starscream
 
 class HomeViewController: UIViewController, UISearchBarDelegate {
+    
+    
+    var service = CustomSocket()
+    
     
     var parent2VC: ContactsViewController? = nil
     
@@ -18,12 +23,12 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     var logoImageView   : UIImageView!
     
     
-    var menuImg   : UIImage = UIImage(named: "menu")!
-    var refreshImg : UIImage = UIImage(named: "refreshBtn")!
-    var searchImg : UIImage = UIImage(named: "search2")!
+    var menuImg   : UIImage = UIImage(named: "menu2")!
+    var refreshImg : UIImage = UIImage(named: "refresh2")!
+    var searchImg : UIImage = UIImage(named: "loupe")!
     
     //TopTabBar
-    var tabs = [ ViewPagerTab(title: "CALLS", image: UIImage(named: "")) ]
+    var tabs = [ViewPagerTab(title: "CALLS", image: UIImage(named: ""))]
     
 
     var viewPager:ViewPagerController!
@@ -35,9 +40,21 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         initialVIew()
         BarbuttonInitializer()
         navigationController?.navigationBar.tintColor = .white
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
+        
     }
     
 
+    @objc func methodOfReceivedNotification(notification: Notification) {
+        let data = notification.object as! [String: Any]
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "CallViewController") as! CallViewController
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    
     func BarbuttonInitializer(){
         self.navigationController?.navigationBar.barStyle = .black
           // Do any additional setup after loading the view.
@@ -53,7 +70,11 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
           self.navigationItem.rightBarButtonItems = (buttons as! [UIBarButtonItem])
           self.navigationItem.rightBarButtonItem?.tintColor = .white
 
-          searchBtn.tintColor = .white
+          
+        searchBar.scopeBarBackgroundImage = UIImage(named: "loupe")
+        searchBar.tintColor = UIColor.white
+        searchBar.barTintColor = UIColor.white
+
           refreshBtn.tintColor = .white
           
           searchBar.delegate = self
@@ -78,6 +99,11 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
 //        navigationItem.setRightBarButton(nil, animated: true)
         UIView.animate(withDuration: 0.5, animations: {
           self.searchBar.alpha = 1
+            self.searchBar.tintColor = UIColor.white
+            if let textfield = self.searchBar.value(forKey: "searchField") as? UITextField {
+                textfield.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.8889126712)
+                textfield.backgroundColor = UIColor.white
+            }
           }, completion: { finished in
             self.searchBar.becomeFirstResponder()
             
@@ -128,6 +154,14 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
 
     func initialVIew()
         {
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                      print("Code Has been Run")
+                     //  self.registerlocal()
+                       self.service.connect()
+
+                   }
             
      tabs += [ ViewPagerTab(title: "CONTACTS", image: UIImage(named: "")) ]
 
@@ -236,8 +270,6 @@ extension HomeViewController: ViewPagerControllerDelegate {
 //
 //        vc.itemNo = index
     }
-    
-    
     
 }
 

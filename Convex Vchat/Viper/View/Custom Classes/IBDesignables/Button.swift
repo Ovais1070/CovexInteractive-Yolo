@@ -48,14 +48,19 @@ import UIKit
      
      private func setGradient(topGradientColor: UIColor?, bottomGradientColor: UIColor?) {
          if let topGradientColor = topGradientColor, let bottomGradientColor = bottomGradientColor {
-             gradientLayer.frame = bounds
+            gradientLayer.frame = bounds
              gradientLayer.colors = [topGradientColor.cgColor, bottomGradientColor.cgColor]
              gradientLayer.borderColor = layer.borderColor
              gradientLayer.borderWidth = layer.borderWidth
              gradientLayer.cornerRadius = layer.cornerRadius
              layer.insertSublayer(gradientLayer, at: 0)
+            gradientLayer.frame = bounds
          } else {
              gradientLayer.removeFromSuperlayer()
          }
      }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = bounds
  }
+}

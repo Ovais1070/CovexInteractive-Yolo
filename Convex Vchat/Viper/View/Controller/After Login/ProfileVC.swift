@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ProfileVC: UIViewController {
 
@@ -17,11 +18,14 @@ class ProfileVC: UIViewController {
     @IBOutlet weak var vUlayer1: UIView!
     @IBOutlet weak var vUlayer2: UIView!
     @IBOutlet weak var editProfileBtn: UIButton!
-    
+    var getprofileVM = GetProfile()
+    var logoutVM = LogoutVM()
+    var imageUrlString: String = ""
     
    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = .white
+        getProfile()
     }
     
     override func viewDidLoad() {
@@ -39,9 +43,57 @@ class ProfileVC: UIViewController {
         vUlayer2.makeCircular()
         profileImg.makeCircular()
         tableView.tableFooterView = UIView()
+        
+        
                  
     }
 
+    
+    func getProfile(){
+        
+        getprofileVM.GetProfile(phone: User.main.mobile!)
+        
+        getprofileVM.getProfileCompletionHandler { (status, message, responseData) in
+            if status == true {
+                self.view.makeToast(message)
+                
+                    self.imageUrlString = responseData["profile_pic"] as! String
+                    self.profileImg.sd_setImage(with: URL(string: self.imageUrlString ), placeholderImage: UIImage(named: "add_a_photo.png"))
+                    self.tableView.reloadData()
+                
+            } else {
+                self.view.makeToast(message)
+            }
+        }
+    }
+    
+    
+    
+    func logOut(){
+        logoutVM.Logout(mobileNumber: "923316519503")
+        
+        logoutVM.logoutCompletionHandler { (status, message) in
+            if status == true {
+                self.view.makeToast(message)
+                if let appDomain = Bundle.main.bundleIdentifier {
+                    UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                }
+                
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "LaunchViewController") as! LaunchVC
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+                
+            } else {
+                self.view.makeToast(message)
+            }
+        }
+        
+        
+    }
+    
+    
     
     @IBAction func editProfileBtn(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -187,7 +239,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
                       navigationController?.pushViewController(vc, animated: true)
                      
                   }else if indexPath.row == 2{
-                      
+                      logOut()
                       
                   } else {
                       let storyboard = UIStoryboard(name: "Main", bundle: nil)
